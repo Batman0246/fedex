@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainable Route Planner</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .background {
+            background-image: url('./bg.png'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center center;
+            height: 100%;
+            position: relative;
+        }
+        .background::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.6);
+        }
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="container">
+            <h1>Sustainable Route Planner</h1>
+            <form id="routeForm" method="POST" action="/plan_route">
+                <select id="startLocation" name="startLocation" required>
+                    <option value="">Select start location</option>
+                </select>
+                <select id="endLocation" name="endLocation" required>
+                    <option value="">Select end location</option>
+                </select>
+                <input type="text" id="stops" name="stops" placeholder="Enter stops (if any)">
+                <input type="number" id="cargoWeight" name="cargoWeight" placeholder="Enter cargo weight" required>
+                <button type="submit">Plan Route</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Placeholder API for Indian states (replace with actual API call)
+        const getIndianStates = async () => {
+            // Simulating API call
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve([
+                        "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+                        "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
+                        "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
+                        "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
+                        "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
+                    ]);
+                }, 1000);
+            });
+        };
+
+        const populateDropdowns = async () => {
+            const states = await getIndianStates();
+            const startSelect = document.getElementById('startLocation');
+            const endSelect = document.getElementById('endLocation');
+
+            states.forEach(state => {
+                const startOption = new Option(state, state);
+                const endOption = new Option(state, state);
+                startSelect.add(startOption);
+                endSelect.add(endOption);
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', populateDropdowns);
+
+        document.getElementById('routeForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this);
+            const requestOptions = {
+                method: 'POST',
+                body: formData
+            };
+
+            fetch('/plan_route', requestOptions)
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob(); // Get the response as a blob
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'route_with_traffic_and_weather.html'; // Set the file name
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        });
+    </script>
+</body>
+</html>
