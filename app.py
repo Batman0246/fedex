@@ -564,7 +564,7 @@ def main(start_city, end_city, stops, cargo_weight):
     else:
         print("Error in getting coordinates for cities or stops.")
     print("Current working directory:", os.getcwd())
-    return render_template('routes.html')
+    return render_template('about.html')
 
 from flask import Flask, request, render_template
 import folium
@@ -590,7 +590,7 @@ def plan_route():
 
 @app.route('/')
 def index():
-    return render_template('routes.html')
+    return render_template('about.html')
 
 # Main function to plan the route
 def main(start_city, end_city, stops, cargo_weight):
