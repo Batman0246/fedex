@@ -1,7 +1,7 @@
 # Dynamic Routing System
 
 ## Overview
-The *Dynamic Routing System* leverages real-time data to recommend efficient routes for vehicles. It integrates multiple APIs and uses advanced algorithms to optimize routing decisions based on traffic, weather, air quality, and vehicle-specific data.
+The *Dynamic Routing System* leverages real-time data to recommend efficient routes for vehicles. It integrates multiple APIs and uses advanced algorithms to optimize routing decisions based on traffic, weather, air quality, and vehicle-specific data. 
 
 ---
 
@@ -22,6 +22,7 @@ The *Dynamic Routing System* leverages real-time data to recommend efficient rou
   - Weatherbit
   - AQICN (Air Quality Index China Network)
   - OSRM (Open Source Routing Machine)
+  (Caution: Continuous or excessive usage of these API may result in rate limiting or suspension of your API key.)
 - *Libraries*: 
   - Pandas (Data Manipulation)
   - NumPy (Numerical Computations)
